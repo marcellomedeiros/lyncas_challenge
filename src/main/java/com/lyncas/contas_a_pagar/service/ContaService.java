@@ -4,6 +4,7 @@ import com.lyncas.contas_a_pagar.domain.conta.Conta;
 import com.lyncas.contas_a_pagar.domain.conta.ContaRegister;
 import com.lyncas.contas_a_pagar.domain.conta.ContaRepository;
 import com.lyncas.contas_a_pagar.domain.conta.ContaResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,12 +32,12 @@ public class ContaService {
             //return listaContas.map(conta -> new ContaResponse(conta));
             return ContaResponse.converter(listaContas);
         }else{
-            Page<Conta> listaContas = contaRepository.findById(idConta, paginacao);
+            Page<Conta> listaContas = contaRepository.findContaById(idConta, paginacao);
             return ContaResponse.converter(listaContas);
         }
     }
 
-    public ResponseEntity<ContaResponse> cadastrarConta(ContaRegister contaRegister, UriComponentsBuilder uriBuilder) throws Exception{
+    public ResponseEntity<ContaResponse> cadastrarConta(@NotNull ContaRegister contaRegister, @NotNull UriComponentsBuilder uriBuilder) throws Exception{
         Conta conta = new Conta(contaRegister.dataVencimento(),
                                 contaRegister.dataPagamento(),
                                 contaRegister.valor(),
@@ -72,26 +75,28 @@ public class ContaService {
         return ResponseEntity.notFound().build();
     }
 
-    public Page<ContaResponse> listarContasAPagar(Date vencimento, String descricao, Pageable paginacao) {
+    public Page<ContaResponse> listarContasAPagar(String descricao, Date dataInicial, Date dataFinal, Pageable paginacao) {
 
         if ( descricao.isEmpty() || descricao.isBlank()) {
-            Page<Conta> listaContas = contaRepository.findByDataVencimento(vencimento, paginacao);
-            //return listaContas.map(conta -> new ContaResponse(conta));
+            Page<Conta> listaContas = contaRepository.findContasByDataVencimentoBetween(dataInicial, dataFinal, paginacao);
+
             return ContaResponse.converter(listaContas);
         }else{
-            Page<Conta> listaContas = contaRepository.findByDataVencimentoAndDescricao(vencimento, descricao, paginacao);
+            Page<Conta> listaContas = contaRepository
+                    .findContaByDescricaoAndDataVencimentoBetween(descricao, dataInicial, dataFinal, paginacao);
             return ContaResponse.converter(listaContas);
         }
     }
 
-    public Page<ContaResponse> listarContasPagas(Date vencimento, String descricao, Pageable paginacao) {
+    public Page<ContaResponse> listarContasPagas(String descricao, Date dataInicio, Date datafim, Pageable paginacao) {
 
         if ( descricao.isEmpty() || descricao.isBlank()) {
-            Page<Conta> listaContas = contaRepository.findByDataVencimento(vencimento, paginacao);
-            //return listaContas.map(conta -> new ContaResponse(conta));
+            Page<Conta> listaContas = contaRepository
+                    .findContasByDataPagamentoBetween(dataInicio, datafim, paginacao);
             return ContaResponse.converter(listaContas);
         }else{
-            Page<Conta> listaContas = contaRepository.findByDataVencimentoAndDescricao(vencimento, descricao, paginacao);
+            Page<Conta> listaContas = contaRepository
+            .findContaByDescricaoAndDataVencimentoBetween(descricao, dataInicio, datafim, paginacao);
             return ContaResponse.converter(listaContas);
         }
     }
@@ -102,5 +107,16 @@ public class ContaService {
             return ResponseEntity.ok(ContaResponse.converterUmaConta(contaOptional.get()));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    public BigDecimal valorPagoPeriodo(@NotNull Date dataInicial, @NotNull Date dataFinal) {
+        BigDecimal valorPago = BigDecimal.ZERO;
+        if (dataInicial.before(dataFinal)){
+            List<Conta> contasPagas = contaRepository.findContasByDataPagamentoBetween(dataFinal, dataFinal);
+            for(Conta conta : contasPagas){
+                valorPago.add(conta.getValor());
+            }
+        }
+        return valorPago;
     }
 }

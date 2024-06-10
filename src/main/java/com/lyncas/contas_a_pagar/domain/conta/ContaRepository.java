@@ -6,20 +6,25 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.util.List;
 
 @Repository
 public interface ContaRepository extends JpaRepository<Conta, Long> {
 
-    Page<Conta> findById(Long id, Pageable pageable);
+    Page<Conta> findContaById(Long id, Pageable pageable);
 
-    Page<Conta> findByDescricao(String descricao, Pageable pageable);
+    //Contas a pagar com descricao
+    Page<Conta> findContaByDescricaoAndDataVencimentoBetween(String descricao, Date startDate, Date endDate, Pageable pageable);
 
-    Page<Conta> findByDataVencimentoAndDescricao(Date dataVencimento, String descricao, Pageable pageable);
+    //Contas a pagar sem descricao
+    Page<Conta> findContasByDataVencimentoBetween(Date startDate, Date endDate, Pageable pageable);
 
-    Page<Conta> findByDataVencimento(Date dataVencimento, Pageable pageable);
+    //Contas pagas
+    Page<Conta> findContasByDataPagamentoBetween(Date startDate, Date endDate, Pageable pageable);
 
-    Page<Conta> findByDataPagamentoNotEmpty(Pageable pageable);
+    //Contas pagas para somar
+    List<Conta> findContasByDataPagamentoBetween(Date startDate, Date endDate);
 
-    Page<Conta> findByDataPagamentoBetween(Date dataInicio, Date dataFim, Pageable pageable);
+
 
 }

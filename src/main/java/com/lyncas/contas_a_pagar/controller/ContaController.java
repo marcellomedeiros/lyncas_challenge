@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @RestController
@@ -54,23 +55,21 @@ public class ContaController {
     }
 
     @GetMapping
-    public Page<ContaResponse> listarContasAPagar(@RequestParam Date dataVencimento,
-                                                 @RequestParam String descricao,
-                                                 @PageableDefault(sort = "dataVencimento",
-                                                 direction = Sort.Direction.ASC,
-                                                 page = 0, size = 10) Pageable paginacao){
-
-        return contaService.listarContasAPagar(dataVencimento, descricao,paginacao);
-    }
-
-    @GetMapping
-    public Page<ContaResponse> listarContasPagas(@RequestParam Date dataInicio,
-                                                  @RequestParam Date dataFim,
-                                                  @PageableDefault(sort = "dataPagamento",
+    public Page<ContaResponse> listarContasAPagar(@RequestParam(required = false) String descricao,
+                                                  @RequestParam Date dataInicial,
+                                                  @RequestParam Date dataFinal,
+                                                  @PageableDefault(sort = "dataVencimento",
                                                           direction = Sort.Direction.ASC,
                                                           page = 0, size = 10) Pageable paginacao){
 
-        return contaService.listarContasPagas(dataInicio, dataFim, paginacao);
+        return contaService.listarContasAPagar(descricao, dataInicial, dataFinal, paginacao);
+    }
+
+    @GetMapping
+    public BigDecimal valorPagoPeriodo(@RequestParam Date dataInicio,
+                                       @RequestParam Date dataFim) throws Exception {
+
+        return contaService.valorPagoPeriodo(dataFim, dataInicio);
     }
 
 
