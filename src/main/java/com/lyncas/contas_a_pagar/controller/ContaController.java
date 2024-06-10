@@ -54,7 +54,7 @@ public class ContaController {
         return contaService.alterarSituacaoConta(idConta, contaRegister);
     }
 
-    @GetMapping
+    @GetMapping("/contas_a_pagar")
     public Page<ContaResponse> listarContasAPagar(@RequestParam(required = false) String descricao,
                                                   @RequestParam Date dataInicial,
                                                   @RequestParam Date dataFinal,
@@ -65,17 +65,11 @@ public class ContaController {
         return contaService.listarContasAPagar(descricao, dataInicial, dataFinal, paginacao);
     }
 
-    @GetMapping
+    @GetMapping("/valor_pago_por_periodo")
     public BigDecimal valorPagoPeriodo(@RequestParam Date dataInicio,
                                        @RequestParam Date dataFim) throws Exception {
 
         return contaService.valorPagoPeriodo(dataFim, dataInicio);
     }
-
-
-
-
-
-
 
 }

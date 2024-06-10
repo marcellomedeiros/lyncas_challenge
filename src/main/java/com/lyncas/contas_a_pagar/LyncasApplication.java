@@ -8,6 +8,7 @@ public class LyncasApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LyncasApplication.class, args);
+
     }
 
 }
