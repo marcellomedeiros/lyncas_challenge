@@ -36,4 +36,11 @@ public class Conta {
 
     private String situacao;
 
+    public Conta(Date dataVencimento, Date dataPagamento, BigDecimal valor, String descricao, String situacao) {
+        this.dataVencimento = dataVencimento;
+        this.dataPagamento = dataPagamento;
+        this.valor = valor;
+        this.descricao = descricao;
+        this.situacao = situacao;
+    }
 }
