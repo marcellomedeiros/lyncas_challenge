@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 public record ContaRegister(
-        Long id,
+        String id,
         Date dataVencimento,
         Date dataPagamento,
         BigDecimal valor,

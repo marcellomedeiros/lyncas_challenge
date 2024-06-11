@@ -25,7 +25,7 @@ public class ContaController {
     private ContaService contaService;
 
     @GetMapping
-    public Page<ContaResponse> listarContas(@RequestParam(required = false) Long idConta,
+    public Page<ContaResponse> listarContas(@RequestParam(required = false) String idConta,
                                               @PageableDefault(sort = "id", direction = Sort.Direction.DESC,
                                                       page = 0, size = 10) Pageable paginacao) {
         return contaService.listar(idConta, paginacao);

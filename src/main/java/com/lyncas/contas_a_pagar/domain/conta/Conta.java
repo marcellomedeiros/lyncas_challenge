@@ -20,8 +20,8 @@ import java.sql.Date;
 public class Conta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @DateTimeFormat
     private Date dataVencimento;

@@ -11,7 +11,7 @@ import java.sql.Date;
 
 
 public record ContaResponse (
-        Long id,
+        String id,
         Date dataVencimento,
         Date dataPagamento,
         BigDecimal valor,

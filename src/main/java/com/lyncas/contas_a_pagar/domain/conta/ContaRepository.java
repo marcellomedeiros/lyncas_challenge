@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ContaRepository extends JpaRepository<Conta, Long> {
 
-    Page<Conta> findContaById(Long id, Pageable pageable);
+    Page<Conta> findContaById(String id, Pageable pageable);
 
     //Contas a pagar com descricao
     Page<Conta> findContaByDescricaoAndDataVencimentoBetween(String descricao, Date startDate, Date endDate, Pageable pageable);

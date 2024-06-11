@@ -25,10 +25,9 @@ public class ContaService {
     private ContaRepository contaRepository;
 
 
-    public Page<ContaResponse> listar(Long idConta, Pageable paginacao) {
-        if(idConta == null){
+    public Page<ContaResponse> listar(String idConta, Pageable paginacao) {
+        if(idConta == null || idConta.isEmpty()){
             Page<Conta> listaContas = contaRepository.findAll(paginacao);
-            //return listaContas.map(conta -> new ContaResponse(conta));
             return ContaResponse.converter(listaContas);
         }else{
             Page<Conta> listaContas = contaRepository.findContaById(idConta, paginacao);
