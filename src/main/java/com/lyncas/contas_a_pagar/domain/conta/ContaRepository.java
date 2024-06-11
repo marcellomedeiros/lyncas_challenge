@@ -9,7 +9,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Repository
-public interface ContaRepository extends JpaRepository<Conta, Long> {
+public interface ContaRepository extends JpaRepository<Conta, String> {
 
     Page<Conta> findContaById(String id, Pageable pageable);
 
