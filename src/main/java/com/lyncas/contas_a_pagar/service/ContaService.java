@@ -119,4 +119,14 @@ public class ContaService {
         }
         return valorPago;
     }
+
+    public ResponseEntity<ContaResponseDTO> removerConta(String id) {
+        Optional<Conta> contaOptional = contaRepository.findById(id);
+        if (contaOptional.isPresent()) {
+            Conta conta = contaOptional.get();
+            contaRepository.delete(conta);
+            return ResponseEntity.ok(new ContaResponseDTO(conta));
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

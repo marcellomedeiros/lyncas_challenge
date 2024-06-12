@@ -73,4 +73,9 @@ public class ContaController {
         return contaService.valorPagoPeriodo(dataFim, dataInicio);
     }
 
+    @DeleteMapping("/{idConta}")
+    public ResponseEntity<ContaResponseDTO> excluir(@PathVariable String idConta) throws Exception {
+        return contaService.removerConta(idConta);
+    }
+
 }
