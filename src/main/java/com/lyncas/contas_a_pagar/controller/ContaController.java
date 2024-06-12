@@ -4,13 +4,13 @@ import com.lyncas.contas_a_pagar.domain.conta.ContaRegisterDTO;
 import com.lyncas.contas_a_pagar.domain.conta.ContaResponseDTO;
 import com.lyncas.contas_a_pagar.service.ContaService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -34,7 +34,7 @@ public class ContaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<ContaResponseDTO> cadastrar(@RequestBody @Validated ContaRegisterDTO contaRegister,
+    public ResponseEntity<ContaResponseDTO> cadastrar(@RequestBody @Valid ContaRegisterDTO contaRegister,
                                                       UriComponentsBuilder uriComponentsBuilder) throws Exception {
         return contaService.cadastrarConta(contaRegister, uriComponentsBuilder);
     }
@@ -42,7 +42,7 @@ public class ContaController {
     @PutMapping("/{idConta}")
     @Transactional
     public ResponseEntity<ContaResponseDTO> atualizar(@PathVariable String idConta,
-                                                      @RequestBody @Validated ContaRegisterDTO contaRegister)
+                                                      @RequestBody @Valid ContaRegisterDTO contaRegister)
                                                    throws Exception {
         return contaService.atualizar(idConta, contaRegister);
     }
@@ -50,7 +50,7 @@ public class ContaController {
     @PutMapping("/{idConta}/situacao")
     @Transactional
     public ResponseEntity<ContaResponseDTO> alterarSituacao(@PathVariable String idConta,
-                                                            @RequestBody @Validated ContaRegisterDTO contaRegister)
+                                                            @RequestBody @Valid ContaRegisterDTO contaRegister)
             throws Exception {
         return contaService.alterarSituacaoConta(idConta, contaRegister);
     }
