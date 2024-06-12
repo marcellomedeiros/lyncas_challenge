@@ -1,9 +1,7 @@
 package com.lyncas.contas_a_pagar.controller;
 
-import com.lyncas.contas_a_pagar.domain.login.AuthDTO;
-import com.lyncas.contas_a_pagar.domain.login.RegisterDTO;
-import com.lyncas.contas_a_pagar.domain.login.User;
-import com.lyncas.contas_a_pagar.domain.login.UserRepository;
+import com.lyncas.contas_a_pagar.domain.login.*;
+import com.lyncas.contas_a_pagar.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +21,19 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
