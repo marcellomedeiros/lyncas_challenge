@@ -8,7 +8,7 @@ import java.sql.Date;
 
 public record ContaRegisterDTO(
 
-        @NotBlank
+        @NotNull
         Date dataVencimento,
         Date dataPagamento,
         @NotNull
